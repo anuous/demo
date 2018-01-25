@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 public interface UserMapper {
 
     @Insert("insert into user(t_name,t_age) values(#{name},#{age})")
-    public int insert(@Param("name") String name,@Param("age")Integer age);
+    @Options(useGeneratedKeys=true,keyColumn = "t_id")
+    public Long insert(@Param("name") String name,@Param("age")Integer age);
 
     @Results({
             @Result(property = "name",column = "t_name"),

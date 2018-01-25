@@ -4,7 +4,6 @@ import com.example.demo.model.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @RestController
 @RequestMapping(value="/users")

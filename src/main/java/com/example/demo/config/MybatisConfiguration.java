@@ -29,13 +29,13 @@ public class MybatisConfiguration {
         //mybatis 其他属性配置
 //        sqlSessionFactoryBean
 //                .setConfigLocation(new PathMatchingResourcePatternResolver().getResource("classpath:SqlMapConfig.xml"));
-        PageInterceptor pageInterceptor = new PageInterceptor();
+        /*PageInterceptor pageInterceptor = new PageInterceptor();
         Properties prop = new Properties();
         prop.put("databaseType", "mysql");
         pageInterceptor.setProperties(prop);
         sqlSessionFactoryBean.setPlugins(new Interceptor[] {
                 pageInterceptor
-        });
+        });*/
         return sqlSessionFactoryBean;
     }
 
@@ -49,11 +49,11 @@ public class MybatisConfiguration {
         return configurer;
     }*/
 
-    @Bean("transactionManager1")
+    /*@Bean("transactionManager1")
     public DataSourceTransactionManager loadTransactionSupportManager(@Autowired DataSource masterDataSource) {
         DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
         transactionManager.setDataSource(masterDataSource);
 
         return transactionManager;
-    }
+    }*/
 }

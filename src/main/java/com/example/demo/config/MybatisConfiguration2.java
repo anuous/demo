@@ -1,24 +1,15 @@
 package com.example.demo.config;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import com.alibaba.druid.support.http.StatViewServlet;
 import com.github.pagehelper.PageInterceptor;
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
-import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.data.transaction.ChainedTransactionManager;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -41,13 +32,14 @@ public class MybatisConfiguration2 {
        //mybatis 其他属性配置
 //        sqlSessionFactoryBean
 //                .setConfigLocation(new PathMatchingResourcePatternResolver().getResource("classpath:SqlMapConfig.xml"));
-        PageInterceptor pageInterceptor = new PageInterceptor();
+        /*PageInterceptor pageInterceptor = new PageInterceptor();
         Properties prop = new Properties();
         prop.put("databaseType", "mysql");
+        //prop.setProperty("params","pageNum=pageNumKey;pageSize=pageSizeKey;");
         pageInterceptor.setProperties(prop);
         sqlSessionFactoryBean.setPlugins(new Interceptor[] {
                 pageInterceptor
-        });
+        });*/
         return sqlSessionFactoryBean;
     }
 
@@ -62,11 +54,11 @@ public class MybatisConfiguration2 {
     }*/
 
     @Bean("transactionManager")
-    public DataSourceTransactionManager loadTransactionSupportManager(@Autowired DataSource slaveDataSource) {
-        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
-        transactionManager.setDataSource(slaveDataSource);
-
-        return transactionManager;
+    public PlatformTransactionManager loadTransactionSupportManager(@Autowired DataSource slaveDataSource,@Autowired DataSource masterDataSource) {
+        DataSourceTransactionManager dtm1 = new DataSourceTransactionManager(slaveDataSource);
+        DataSourceTransactionManager dtm2 = new DataSourceTransactionManager(masterDataSource);
+        ChainedTransactionManager ctm = new ChainedTransactionManager(dtm1, dtm2);
+        return ctm;
     }
 
 }

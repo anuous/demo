@@ -4,6 +4,7 @@ import com.example.demo.daoImpl.UserMapper;
 import com.example.demo.model.Dept;
 import com.example.demo.model.User;
 import com.example.demo.serviceImpl.service.IUserService;
+import com.github.pagehelper.PageInfo;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,5 +48,12 @@ public class DemoApplicationTests {
 		dept.setDeptNo("001");
 		Long res=userService.addDept(dept);
 		System.out.println(res);
+	}
+
+
+	@Test
+	public void testPage(){
+		PageInfo<User> users=userService.listUser(2,1);
+		System.out.println(users.getSize());
 	}
 }

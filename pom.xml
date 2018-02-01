@@ -42,6 +42,12 @@
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
 
+		<!-- rabbitmq依赖jar-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+
 		<!-- springboot 微服务 监控和管理 模块 支持动态改变日志级别-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

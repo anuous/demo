@@ -3,6 +3,7 @@ package com.example.demo;
 import com.example.demo.daoImpl.UserMapper;
 import com.example.demo.model.Dept;
 import com.example.demo.model.User;
+import com.example.demo.rabbitmq.Sender;
 import com.example.demo.serviceImpl.service.IUserService;
 import com.github.pagehelper.PageInfo;
 import org.junit.Assert;
@@ -24,6 +25,9 @@ public class DemoApplicationTests {
 
 	@Autowired
 	public IUserService userService;
+
+	@Autowired
+	public Sender sender;
 
 	@Test
 	public void testInsert(){
@@ -55,5 +59,10 @@ public class DemoApplicationTests {
 	public void testPage(){
 		PageInfo<User> users=userService.listUser(2,1);
 		System.out.println(users.getSize());
+	}
+
+	@Test
+	public void testMQ(){
+		sender.sender("this is a test sender message !");
 	}
 }

@@ -4,6 +4,7 @@ import com.example.demo.daoImpl.UserMapper;
 import com.example.demo.model.Dept;
 import com.example.demo.model.User;
 import com.example.demo.rabbitmq.Sender;
+import com.example.demo.scheduled.SyncServiceImpl;
 import com.example.demo.serviceImpl.service.IUserService;
 import com.github.pagehelper.PageInfo;
 import freemarker.ext.beans.HashAdapter;
@@ -27,6 +28,7 @@ import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = DemoApplication.class)
@@ -50,7 +52,8 @@ public class DemoApplicationTests {
 	@Autowired
 	private FreeMarkerConfigurer freeMarkerConfigurer;  //自动注入
 
-
+	@Autowired
+	private SyncServiceImpl syncService;
 	@Test
 	public void testInsert(){
 		//Assert.assertEquals(1L,userMapper.insert("anuous",21).longValue());
@@ -142,4 +145,23 @@ public class DemoApplicationTests {
 		helper.addInline("img",file);
 		javaMailSender.send(message);
 	}
+
+	@Test
+	public void TestSync() throws Exception{
+		long start=System.currentTimeMillis();
+		Future<String> one= syncService.syncInputOne();
+		Future<String> two=syncService.syncInputTwo();
+		Future<String> three=syncService.syncInputThree();
+		while(true){
+			if(one.isDone()&&two.isDone()&&three.isDone()){
+				System.out.println("全部任务完成！耗时："+(System.currentTimeMillis()-start)+" ms");
+				break;
+			}
+			Thread.sleep(100);
+		}
+		//Thread.sleep(50000);
+	}
+
+
+
 }
